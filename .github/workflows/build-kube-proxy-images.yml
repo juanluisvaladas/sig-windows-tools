@@ -7,6 +7,12 @@ on:
       proxy_version:
         description: 'Version of kube-proxy to build (ex: v1.27.1)'
         required: true
+      repository:
+        description: 'Repository to push the image to (ex: sigwindowstools)'
+        required: false
+        default: 'sigwindowstools'
+
+
 
 jobs:
   build:
@@ -16,5 +22,5 @@ jobs:
     - name: Build and push images
       run: |
         echo "${{ secrets.DOCKER_SECRET }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-        pushd ./hostprocess/calico 
-        ./build.sh -p ${{ github.event.inputs.proxy_version }}
+        pushd ./hostprocess/calico
+        ./build.sh -p ${{ github.event.inputs.proxy_version }} -r "${{ github.event.inputs.repository }}"
